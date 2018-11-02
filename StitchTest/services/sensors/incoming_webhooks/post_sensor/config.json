@@ -1,0 +1,12 @@
+{
+    "id": "5ba281a817639e36a337ef2f",
+    "name": "post_sensor",
+    "run_as_user_id": "",
+    "run_as_user_id_script_source": "",
+    "options": {
+        "httpMethod": "POST",
+        "secret": "test",
+        "validationMethod": "SECRET_AS_QUERY_PARAM"
+    },
+    "respond_result": false
+}

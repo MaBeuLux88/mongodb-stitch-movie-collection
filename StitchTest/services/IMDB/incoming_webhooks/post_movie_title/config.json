@@ -1,0 +1,12 @@
+{
+    "id": "5ba28f58dced5fddd25fd41d",
+    "name": "post_movie_title",
+    "run_as_user_id": "",
+    "run_as_user_id_script_source": "",
+    "options": {
+        "httpMethod": "POST",
+        "secret": "test",
+        "validationMethod": "SECRET_AS_QUERY_PARAM"
+    },
+    "respond_result": true
+}

@@ -1,0 +1,17 @@
+{
+    "id": "5ba2a471698a67cd0be5b889",
+    "name": "IMDB",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT"
+        ],
+        "database": "stitch",
+        "collection": "movies",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "full_document": true
+    },
+    "function_name": "IMDB_fetch_data_by_title",
+    "disabled": false
+}

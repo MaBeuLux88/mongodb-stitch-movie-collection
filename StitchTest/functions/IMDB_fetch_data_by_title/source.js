@@ -3,7 +3,8 @@ exports = function(changeEvent) {
   var title = encodeURIComponent(changeEvent.fullDocument.Title.trim());
   
   var movies = context.services.get("mongodb-atlas").db("stitch").collection("movies");
-  var imdb_url = "http://www.omdbapi.com/?apikey=ABCDEF&t=" + title;
+  var apikey = context.values.get("imdb-api-key");
+  var imdb_url = "http://www.omdbapi.com/?apikey=" + apikey + "&t=" + title;
   
   const http = context.services.get("IMDB");
     return http
@@ -13,4 +14,3 @@ exports = function(changeEvent) {
         movies.updateOne({"_id":docId}, doc);
         });
 };
-

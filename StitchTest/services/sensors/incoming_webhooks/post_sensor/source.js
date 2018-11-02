@@ -1,8 +1,9 @@
 exports = function(payload, response) {
   const mongodb = context.services.get("mongodb-atlas");
-  const movies = mongodb.db("stitch").collection("movies");
+  const sensors = mongodb.db("stitch").collection("sensors");
   var body = EJSON.parse(payload.body.text());
-  movies.insertOne(body)
+  body.createdAt = new Date();
+  sensors.insertOne(body)
   .then(result => {
     response.setStatusCode(201);
   });

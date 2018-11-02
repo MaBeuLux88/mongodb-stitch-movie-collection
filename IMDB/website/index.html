@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<title>My Movie Collection</title>
+<head>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.14/stitch.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        const client = stitch.Stitch.initializeDefaultAppClient('stitchtest-adsgi');
+        const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
+
+        client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(user =>
+            db.collection('movies').find().asArray()
+        ).then(docs => {
+            console.log("Found docs", docs)
+            for (var x in docs) {
+                var row = '' +
+                    '<tr>' +
+                    '<th scope="row">' + eval(eval(x) + 1) + '</th>' +
+                    '<td>' + docs[x].Title + '</td>' +
+                    '<td>' + docs[x].Year + '</td>' +
+                    '<td>' + docs[x].Released + '</td>' +
+                    '<td>' + docs[x].Runtime + '</td>' +
+                    '<td>' + docs[x].Genre + '</td>' +
+                    '<td>' + docs[x].Language + '</td>' +
+                    '<td>' + docs[x].Metascore + '</td>' +
+                    '<td>' + docs[x].imdbRating + '</td>' +
+                    '<td>' + docs[x].BoxOffice + '</td>' +
+                    '<td>' + docs[x].Production + '</td>' +
+                    '</tr>';
+                $('#movies').append(row);
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    </script>
+</head>
+
+<body>
+<h1 class="text-center">My Movie Collection</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Year</th>
+        <th scope="col">Released</th>
+        <th scope="col">Runtime</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Language</th>
+        <th scope="col">Metascore</th>
+        <th scope="col">IMDB Rating</th>
+        <th scope="col">Box Office</th>
+        <th scope="col">Production</th>
+    </tr>
+    </thead>
+    <tbody id="movies">
+    </tbody>
+</table>
+</body>
+</html>
