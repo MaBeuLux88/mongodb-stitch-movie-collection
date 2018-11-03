@@ -2,40 +2,53 @@
 <html>
 <title>My Movie Collection</title>
 <head>
+    <link rel="shortcut icon" type="image/png" href="https://www.mongodb.com/assets/images/global/favicon.ico"/>
     <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.14/stitch.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script>
         const client = stitch.Stitch.initializeDefaultAppClient('stitchtest-adsgi');
-        const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
 
-        client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(user =>
-            db.collection('movies').find().asArray()
-        ).then(docs => {
-            console.log("Found docs", docs)
-            for (var x in docs) {
-                var row = '' +
-                    '<tr>' +
-                    '<th scope="row">' + eval(eval(x) + 1) + '</th>' +
-                    '<td>' + docs[x].Title + '</td>' +
-                    '<td>' + docs[x].Year + '</td>' +
-                    '<td>' + docs[x].Released + '</td>' +
-                    '<td>' + docs[x].Runtime + '</td>' +
-                    '<td>' + docs[x].Genre + '</td>' +
-                    '<td>' + docs[x].Language + '</td>' +
-                    '<td>' + docs[x].Metascore + '</td>' +
-                    '<td>' + docs[x].imdbRating + '</td>' +
-                    '<td>' + docs[x].BoxOffice + '</td>' +
-                    '<td>' + docs[x].Production + '</td>' +
-                    '</tr>';
-                $('#movies').append(row);
-            }
-        }).catch(err => {
-            console.error(err)
-        });
+        function fetch_movies() {
+            const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
+            db.collection('movies').find().asArray().then(docs => {
+                console.log("Found docs", docs);
+                for (let x in docs) {
+                    let doc = docs[x];
+                    let row = '' +
+                        '<tr>' +
+                        '<th scope="row">' + eval(eval(x) + 1) + '</th>' +
+                        '<td>' + doc.Title + '</td>' +
+                        '<td>' + doc.Year + '</td>' +
+                        '<td>' + doc.Released + '</td>' +
+                        '<td>' + doc.Runtime + '</td>' +
+                        '<td>' + doc.Genre + '</td>' +
+                        '<td>' + doc.Language + '</td>' +
+                        '<td>' + doc.Metascore + '</td>' +
+                        '<td>' + doc.imdbRating + '</td>' +
+                        '<td>' + doc.BoxOffice + '</td>' +
+                        '<td>' + doc.Production + '</td>' +
+                        '</tr>';
+                    $('#movies').append(row);
+                }
+            }).catch(err => {
+                console.error(err)
+            });
+        }
+
+        let hasRedirectResult = client.auth.hasRedirectResult();
+
+        if (hasRedirectResult) {
+            client.auth.handleRedirectResult().then(user => {
+                fetch_movies(user);
+            });
+        } else {
+            const credential = new stitch.GoogleRedirectCredential();
+            client.auth.loginWithRedirect(credential);
+        }
+
     </script>
 </head>
 
