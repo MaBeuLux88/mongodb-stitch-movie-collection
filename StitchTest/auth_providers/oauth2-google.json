@@ -1,0 +1,16 @@
+{
+    "id": "5bdcdaab57c70dc18762d38b",
+    "name": "oauth2-google",
+    "type": "oauth2-google",
+    "config": {
+        "clientId": "713365605425-9o5lagdh2o65c04nkg574rb7p2090nep.apps.googleusercontent.com"
+    },
+    "disabled": false,
+    "redirect_uris": [
+        "http://stitch-demo.servebeer.com/",
+        "http://localhost/",
+        "http://192.168.1.14:8080/",
+        "http://86.245.223.47/",
+        "http://yoda.noip.me/"
+    ]
+}
