@@ -1,0 +1,17 @@
+{
+    "id": "5bf8a271dced5f2b5fbd3954",
+    "name": "UpdateElastic",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "UPDATE"
+        ],
+        "database": "stitch",
+        "collection": "movies",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "full_document": true
+    },
+    "function_name": "UpdateElastic",
+    "disabled": true
+}

@@ -11,6 +11,10 @@ exports = function(changeEvent) {
       .get({ url: imdb_url })
       .then(resp => {
         var doc = EJSON.parse(resp.body.text());
-        movies.updateOne({"_id":docId}, doc);
-        });
+        if (doc.Response == "False") {
+          movies.deleteOne({"_id":docId});
+        } else {
+          movies.updateOne({"_id":docId}, {$set: doc});
+        }
+      });
 };

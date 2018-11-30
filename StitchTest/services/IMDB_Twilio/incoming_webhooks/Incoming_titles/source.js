@@ -11,7 +11,7 @@ exports = function(payload) {
   movies.insertOne(
     {
       "Title":payload.Body.trim(),
-      "Owner": payload.From
+      "OwnerPhone": payload.From
     }
   )
   .then(result => {

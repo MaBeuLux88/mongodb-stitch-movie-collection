@@ -11,6 +11,7 @@
         "http://localhost/",
         "http://192.168.1.14:8080/",
         "http://86.245.223.47/",
-        "http://yoda.noip.me/"
+        "http://yoda.noip.me/",
+        "http://localhost:8080/"
     ]
 }
