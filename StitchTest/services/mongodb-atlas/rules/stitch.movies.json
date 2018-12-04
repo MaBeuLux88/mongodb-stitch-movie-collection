@@ -6,12 +6,10 @@
         {
             "name": "default",
             "apply_when": {},
-            "write": false,
-            "insert": false,
-            "delete": false,
-            "additional_fields": {
-                "read": true
-            }
+            "write": true,
+            "insert": true,
+            "delete": true,
+            "additional_fields": {}
         }
     ],
     "schema": {

@@ -1,20 +1,46 @@
 <!DOCTYPE html>
-<html>
-<title>My Movie Collection</title>
+<html lang="en">
 <head>
     <link rel="shortcut icon" type="image/png" href="https://www.mongodb.com/assets/images/global/favicon.ico"/>
     <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.14/stitch.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>My Movie Collection</title>
 
     <script>
+        function addNewTitle() {
+            const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
+            const title = $("#title");
+            console.log("Adding new title : " + title.val());
+            db.collection('movies').insertOne({"Title": title.val()}).then(function () {
+                title.val("");
+                fetch_movies();
+            });
+        }
+
+        function removeMovie() {
+            const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
+            const newTitle = $("#title");
+            console.log("Removing title : " + newTitle.val());
+            db.collection('movies').deleteMany({"Title": newTitle.val()}).then(function () {
+                newTitle.val("");
+                fetch_movies();
+            });
+        }
+
+        function refreshMovies() {
+            fetch_movies();
+        }
+
         const client = stitch.Stitch.initializeDefaultAppClient('stitchtest-adsgi');
 
         function fetch_movies() {
             const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
             db.collection('movies').find().asArray().then(docs => {
                 console.log("Found docs", docs);
+                let movies = $('#movies');
+                movies.empty();
                 for (let x in docs) {
                     let doc = docs[x];
                     let row = '' +
@@ -31,7 +57,7 @@
                         '<td>' + doc.BoxOffice + '</td>' +
                         '<td>' + doc.Production + '</td>' +
                         '</tr>';
-                    $('#movies').append(row);
+                    movies.append(row);
                 }
             }).catch(err => {
                 console.error(err)
@@ -48,7 +74,6 @@
             const credential = new stitch.GoogleRedirectCredential();
             client.auth.loginWithRedirect(credential);
         }
-
     </script>
 </head>
 
@@ -74,5 +99,14 @@
     <tbody id="movies">
     </tbody>
 </table>
+
+<div>
+    <label for="title">Movie Title</label>
+    <input type="text" id="title">
+    <input type="submit" value="Add New Title" onClick="addNewTitle()">
+    <input type="submit" value="Remove Title" onClick="removeMovie()">
+    <input type="submit" value="Refresh Movies" onClick="refreshMovies()">
+</div>
+
 </body>
 </html>
