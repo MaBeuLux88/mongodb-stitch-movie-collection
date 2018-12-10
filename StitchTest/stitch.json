@@ -1,7 +1,7 @@
 {
-    "app_id": "stitchtest-adsgi",
+    "app_id": "moviecollection-idmpd",
     "config_version": 20180301,
-    "name": "StitchTest",
+    "name": "MovieCollection",
     "location": "IE",
     "deployment_model": "GLOBAL",
     "security": {},

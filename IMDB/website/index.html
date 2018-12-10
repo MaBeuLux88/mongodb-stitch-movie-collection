@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <link rel="shortcut icon" type="image/png" href="https://www.mongodb.com/assets/images/global/favicon.ico"/>
-    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.14/stitch.js"></script>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.1.1/stitch.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -29,11 +29,21 @@
             });
         }
 
+        function removeAllMovies() {
+            const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
+            const newTitle = $("#title");
+            console.log("Removing all movies.");
+            db.collection('movies').deleteMany({}).then(function () {
+                newTitle.val("");
+                fetch_movies();
+            });
+        }
+
         function refreshMovies() {
             fetch_movies();
         }
 
-        const client = stitch.Stitch.initializeDefaultAppClient('stitchtest-adsgi');
+        const client = stitch.Stitch.initializeDefaultAppClient('moviecollection-idmpd');
 
         function fetch_movies() {
             const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
@@ -106,6 +116,7 @@
     <input type="submit" value="Add New Title" onClick="addNewTitle()">
     <input type="submit" value="Remove Title" onClick="removeMovie()">
     <input type="submit" value="Refresh Movies" onClick="refreshMovies()">
+    <input type="submit" value="Remove All Movies" onClick="removeAllMovies()">
 </div>
 
 </body>
