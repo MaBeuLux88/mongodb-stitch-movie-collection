@@ -4,5 +4,8 @@
     "name": "StitchTest",
     "location": "IE",
     "deployment_model": "GLOBAL",
-    "security": {}
+    "security": {},
+    "hosting": {
+        "enabled": false
+    }
 }

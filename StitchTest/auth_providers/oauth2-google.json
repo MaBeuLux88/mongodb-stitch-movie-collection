@@ -6,6 +6,15 @@
         "clientId": "713365605425-9o5lagdh2o65c04nkg574rb7p2090nep.apps.googleusercontent.com"
     },
     "disabled": false,
+    "metadata_fields": [
+        {
+            "required": false,
+            "name": "email"
+        }
+    ],
+    "domain_restrictions": [
+        "mongodb.com"
+    ],
     "redirect_uris": [
         "http://stitch-demo.servebeer.com/",
         "http://localhost/",
