@@ -1,5 +1,4 @@
 {
-    "id": "5c0e748217639e6b3efd3d34",
     "name": "imdb-api-key",
     "value": "NOT REAL VALUE - Get a real token at http://www.omdbapi.com/apikey.aspx",
     "private": false

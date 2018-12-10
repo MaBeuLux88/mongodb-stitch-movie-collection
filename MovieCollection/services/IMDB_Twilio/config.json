@@ -1,5 +1,4 @@
 {
-    "id": "5c0e748017639e6b3efd3ccf",
     "name": "IMDB_Twilio",
     "type": "twilio",
     "config": {
