@@ -1,0 +1,17 @@
+{
+    "name": "movies_stats",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "UPDATE"
+        ],
+        "database": "stitch",
+        "collection": "movies",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "full_document": false,
+        "unordered": false
+    },
+    "function_name": "movie_stats",
+    "disabled": false
+}

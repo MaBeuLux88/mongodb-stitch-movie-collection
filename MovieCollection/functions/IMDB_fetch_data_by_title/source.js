@@ -1,10 +1,10 @@
 exports = function(changeEvent) {
-  var docId = changeEvent.documentKey._id;
-  var title = encodeURIComponent(changeEvent.fullDocument.Title.trim());
+  const docId = changeEvent.documentKey._id;
+  const title = encodeURIComponent(changeEvent.fullDocument.Title.trim());
   
-  var movies = context.services.get("mongodb-atlas").db("stitch").collection("movies");
-  var apikey = context.values.get("imdb-api-key");
-  var imdb_url = "http://www.omdbapi.com/?apikey=" + apikey + "&t=" + title;
+  const movies = context.services.get("mongodb-atlas").db("stitch").collection("movies");
+  const apikey = context.values.get("imdb-api-key");
+  const imdb_url = "http://www.omdbapi.com/?apikey=" + apikey + "&t=" + title;
   console.log("Title : " + title);
   
   const http = context.services.get("IMDB");
@@ -16,6 +16,8 @@ exports = function(changeEvent) {
         if (doc.Response == "False") {
           movies.deleteOne({"_id":docId});
         } else {
+          doc.DVD_ISO = context.functions.execute("toIsoDate", doc.DVD);
+          doc.Released_ISO = context.functions.execute("toIsoDate", doc.Released);
           movies.updateOne({"_id":docId}, {$set: doc});
         }
       });
