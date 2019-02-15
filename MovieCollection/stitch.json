@@ -6,6 +6,5 @@
     "security": {},
     "hosting": {
         "enabled": true,
-        "app_default_domain": "moviecollection-idmpd.mongodbstitch.com"
     }
 }

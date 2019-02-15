@@ -4,6 +4,9 @@
     "config": {
         "clientId": "713365605425-9o5lagdh2o65c04nkg574rb7p2090nep.apps.googleusercontent.com"
     },
+    "secret_config": {
+        "clientSecret": "__oauth2-google_clientSecret"
+    },
     "disabled": false,
     "metadata_fields": [
         {
