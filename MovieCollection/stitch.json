@@ -5,6 +5,6 @@
     "deployment_model": "GLOBAL",
     "security": {},
     "hosting": {
-        "enabled": true,
+        "enabled": true
     }
 }
