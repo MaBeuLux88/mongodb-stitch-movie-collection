@@ -6,11 +6,12 @@ exports = function(changeEvent) {
   console.log("IMDB Rating : " + imdbRating);
 
   const stats = context.services.get("mongodb-atlas").db("stitch").collection("movies_stats");
-  stats.findOne({"stats":"movies"}).then(
+  stats.findOne({"_id":"movies"}).then(
     doc => {
       console.log(EJSON.stringify(doc));
       doc = doc ||
       {
+        "_id":"movies",
         "avg_metascore" : 0.0,
         "avg_metascore_count" : 0,
         "avg_imdbRating" : 0.0,
@@ -26,6 +27,6 @@ exports = function(changeEvent) {
         doc.avg_imdbRating = (doc.avg_imdbRating * doc.avg_imdbRating_count + imdbRating) / (doc.avg_imdbRating_count + 1);
         doc.avg_imdbRating_count++;
       }
-      stats.updateOne({"stats": "movies"}, {"$set" : doc}, {upsert: true});
+      stats.updateOne({"_id": "movies"}, {"$set" : doc}, {upsert: true});
     });
 };
