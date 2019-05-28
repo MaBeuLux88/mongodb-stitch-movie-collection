@@ -1,0 +1,5 @@
+{
+    "name": "imdb_api_key",
+    "value": "imdb_api_key_secret",
+    "from_secret": true
+}

@@ -1,17 +1,17 @@
 {
-    "name": "IMDB",
+    "name": "movies_stats_update_trigger",
     "type": "DATABASE",
     "config": {
         "operation_types": [
-            "INSERT"
+            "UPDATE"
         ],
         "database": "stitch",
         "collection": "movies",
         "service_name": "mongodb-atlas",
         "match": {},
-        "full_document": true,
+        "full_document": false,
         "unordered": false
     },
-    "function_name": "IMDB_fetch_data_by_title",
+    "function_name": "movie_stats_update",
     "disabled": false
 }

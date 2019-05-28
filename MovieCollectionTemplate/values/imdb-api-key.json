@@ -1,5 +1,0 @@
-{
-    "name": "imdb-api-key",
-    "value": "NOT REAL VALUE - Get a real token at http://www.omdbapi.com/apikey.aspx",
-    "from_secret": false
-}

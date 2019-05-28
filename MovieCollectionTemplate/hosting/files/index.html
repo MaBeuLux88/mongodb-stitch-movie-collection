@@ -2,122 +2,11 @@
 <html lang="en">
 <head>
     <link rel="shortcut icon" type="image/png" href="https://www.mongodb.com/assets/images/global/favicon.ico"/>
-    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.3.0/stitch.js"></script>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.4.0/stitch.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <title>My Movie Collection</title>
-
-    <script>
-        let db;
-
-        async function updateStats() {
-            const changeStream = await db.collection('movies_stats').watch(["movies"]);
-            changeStream.onNext((event) => {
-                if (event.operationType === 'delete') {
-                    console.log("Not listening to delete operations");
-                    return;
-                }
-                console.log('UPDATE MY STATS!!! ', event);
-                let avg_metascore = $('#avg_metascore');
-                let avg_metascore_count = $('#avg_metascore_count');
-                let avg_imdbRating = $('#avg_imdbRating');
-                let avg_imdbRating_count = $('#avg_imdbRating_count');
-
-                avg_metascore.text(event.fullDocument.avg_metascore);
-                avg_metascore_count.text(event.fullDocument.avg_metascore_count);
-                avg_imdbRating.text(event.fullDocument.avg_imdbRating);
-                avg_imdbRating_count.text(event.fullDocument.avg_imdbRating_count);
-            })
-        }
-
-        function addNewTitle() {
-            //const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
-            const title = $("#title");
-            console.log("Adding new title : " + title.val());
-            db.collection('movies').insertOne({"Title": title.val()}).then(async function (result) {
-                title.val("");
-                console.log(result.insertedId);
-                const changeStream = await db.collection('movies').watch([result.insertedId]);
-                changeStream.onNext((event) => {
-                    console.log('My movie update:', event);
-                    fetch_movies();
-                    changeStream.close()
-                })
-            });
-        }
-
-        function removeMovie() {
-            //const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
-            const newTitle = $("#title");
-            console.log("Removing title : " + newTitle.val());
-            db.collection('movies').deleteMany({"Title": newTitle.val()}).then(function () {
-                newTitle.val("");
-                fetch_movies();
-            });
-        }
-
-        function removeAllMovies() {
-            const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
-            const newTitle = $("#title");
-            console.log("Removing all movies.");
-            db.collection('movies_stats').deleteOne({"_id": "movies"});
-            db.collection('movies').deleteMany({}).then(function () {
-                newTitle.val("");
-                fetch_movies();
-            });
-        }
-
-        function refreshMovies() {
-            fetch_movies();
-        }
-
-        const client = stitch.Stitch.initializeDefaultAppClient('moviecollection-vazgz');
-
-        function fetch_movies() {
-            //const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
-            db.collection('movies').find().asArray().then(docs => {
-                console.log("Found docs", docs);
-                let movies = $('#movies');
-                movies.empty();
-                for (let x in docs) {
-                    let doc = docs[x];
-                    let row = '' +
-                        '<tr>' +
-                        '<th scope="row">' + eval(eval(x) + 1) + '</th>' +
-                        '<td>' + doc.Title + '</td>' +
-                        '<td>' + doc.Year + '</td>' +
-                        '<td>' + doc.Released + '</td>' +
-                        '<td>' + doc.Released_ISO + '</td>' +
-                        '<td>' + doc.Runtime + '</td>' +
-                        '<td>' + doc.Genre + '</td>' +
-                        '<td>' + doc.Language + '</td>' +
-                        '<td>' + doc.Metascore + '</td>' +
-                        '<td>' + doc.imdbRating + '</td>' +
-                        '<td>' + doc.BoxOffice + '</td>' +
-                        '<td>' + doc.Production + '</td>' +
-                        '</tr>';
-                    movies.append(row);
-                }
-            }).catch(err => {
-                console.error(err)
-            });
-        }
-
-        let hasRedirectResult = client.auth.hasRedirectResult();
-
-        if (hasRedirectResult) {
-            client.auth.handleRedirectResult().then(user => {
-                db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('stitch');
-                updateStats();
-                fetch_movies(user);
-            });
-        } else {
-            const credential = new stitch.GoogleRedirectCredential();
-            client.auth.loginWithRedirect(credential);
-        }
-
-    </script>
 </head>
 
 <body>
@@ -149,7 +38,7 @@
     <input type="text" id="title">
     <input type="submit" value="Add New Title" onClick="addNewTitle()">
     <input type="submit" value="Remove Title" onClick="removeMovie()">
-    <input type="submit" value="Refresh Movies" onClick="refreshMovies()">
+    <input type="submit" value="Refresh Movies" onClick="fetch_movies()">
     <input type="submit" value="Remove All Movies" onClick="removeAllMovies()">
 </div>
 
@@ -174,5 +63,6 @@
     </tbody>
 </table>
 
+<script src="data.js"></script>
 </body>
 </html>

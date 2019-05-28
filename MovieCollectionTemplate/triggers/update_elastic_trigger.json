@@ -1,0 +1,17 @@
+{
+    "name": "update_elastic_trigger",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "UPDATE"
+        ],
+        "database": "stitch",
+        "collection": "movies",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "full_document": true,
+        "unordered": false
+    },
+    "function_name": "update_elastic",
+    "disabled": true
+}

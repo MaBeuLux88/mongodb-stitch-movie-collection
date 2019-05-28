@@ -1,0 +1,5 @@
+{
+    "name": "movie_stats_delete",
+    "private": true,
+    "can_evaluate": {}
+}

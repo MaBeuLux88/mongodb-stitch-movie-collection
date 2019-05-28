@@ -1,17 +1,17 @@
 {
-    "name": "UpdateElastic",
+    "name": "imdb_new_movie_trigger",
     "type": "DATABASE",
     "config": {
         "operation_types": [
-            "UPDATE"
+            "INSERT"
         ],
         "database": "stitch",
         "collection": "movies",
         "service_name": "mongodb-atlas",
         "match": {},
         "full_document": true,
-        "unordered": false
+        "unordered": true
     },
-    "function_name": "UpdateElastic",
-    "disabled": true
+    "function_name": "imdb_fetch_data_by_title",
+    "disabled": false
 }

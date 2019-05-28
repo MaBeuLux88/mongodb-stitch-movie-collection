@@ -19,8 +19,6 @@
         "10gen.com"
     ],
     "redirect_uris": [
-        "http://192.168.1.14:8080/",
-        "http://86.245.223.47/",
         "http://localhost:8080/",
         "https://moviecollection-vazgz.mongodbstitch.com/"
     ]

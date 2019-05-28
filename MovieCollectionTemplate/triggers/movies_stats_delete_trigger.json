@@ -1,9 +1,9 @@
 {
-    "name": "movies_stats",
+    "name": "movies_stats_delete_trigger",
     "type": "DATABASE",
     "config": {
         "operation_types": [
-            "UPDATE"
+            "DELETE"
         ],
         "database": "stitch",
         "collection": "movies",
@@ -12,6 +12,6 @@
         "full_document": false,
         "unordered": false
     },
-    "function_name": "movie_stats",
+    "function_name": "movie_stats_delete",
     "disabled": false
 }
