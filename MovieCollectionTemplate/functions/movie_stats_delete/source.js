@@ -27,7 +27,7 @@ exports = function (changeEvent) {
             "avg_imdbRating_count": "$imdbRating.avg_imdbRating_count"
         }
     }];
-    
+
     movies.count().then(nbDocs => {
       if (nbDocs === 0) {
         console.log("Movies stats reset.");
@@ -35,10 +35,8 @@ exports = function (changeEvent) {
       } else {
         movies.aggregate(pipeline).next().then(doc => {
         console.log("aggregate stats : ", EJSON.stringify(doc));
-        stats.updateOne({"_id": "movies"}, {"$set": doc});  
+        stats.updateOne({"_id": "movies"}, {"$set": doc});
     }).catch(e => console.log("Update stats during movie deletion failed.", e));
       }
     }).catch(e => console.log("Fail counting movies", e));
-    
-    
 };
