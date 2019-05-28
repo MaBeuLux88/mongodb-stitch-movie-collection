@@ -4,6 +4,23 @@ let collStats;
 let collMovies;
 const statsFilter = {"_id": "movies"};
 
+const client = stitch.Stitch.initializeDefaultAppClient(APP_ID);
+let hasRedirectResult = client.auth.hasRedirectResult();
+
+if (hasRedirectResult) {
+    client.auth.handleRedirectResult().then(() => {
+        const db = client.getServiceClient(stitch.RemoteMongoClient.factory, ATLAS_SERVICE).db('stitch');
+        collStats = db.collection('movies_stats');
+        collMovies = db.collection('movies');
+        initStats();
+        updateStats();
+        fetch_movies();
+    });
+} else {
+    const credential = new stitch.GoogleRedirectCredential();
+    client.auth.loginWithRedirect(credential);
+}
+
 function initStats() {
     collStats.findOne(statsFilter)
         .then(doc => printStats(doc))
@@ -25,9 +42,9 @@ function printStats(movie_stats) {
     let avg_imdbRating_count = $('#avg_imdbRating_count');
 
     if (movie_stats) {
-        avg_metascore.text(movie_stats.avg_metascore);
+        avg_metascore.text(roundToTwo(movie_stats.avg_metascore));
         avg_metascore_count.text(movie_stats.avg_metascore_count);
-        avg_imdbRating.text(movie_stats.avg_imdbRating);
+        avg_imdbRating.text(roundToTwo(movie_stats.avg_imdbRating));
         avg_imdbRating_count.text(movie_stats.avg_imdbRating_count);
     } else {
         avg_metascore.text("0");
@@ -37,13 +54,17 @@ function printStats(movie_stats) {
     }
 }
 
+function roundToTwo(num) {
+    return +(Math.round(num + "e+2") + "e-2");
+}
+
 function addNewTitle() {
     const title = $("#title");
     console.log("Adding new title : " + title.val());
     collMovies.insertOne({"Title": title.val()}).then(async result => {
         title.val("");
         const changeStream = await collMovies.watch([result.insertedId]);
-        changeStream.onNext((event) => {
+        changeStream.onNext(event => {
             console.log('My movie update:', event);
             fetch_movies();
             changeStream.close()
@@ -51,19 +72,16 @@ function addNewTitle() {
     }).catch(e => console.log("Insert new movie failed.", e));
 }
 
-function removeMovie() {
-    const newTitle = $("#title");
-    console.log("Removing title : " + newTitle.val());
-    collMovies.deleteMany({"Title": newTitle.val()}).then(() => {
-        newTitle.val("");
+function removeMovie(title) {
+    console.log("Removing title : " + title);
+    collMovies.deleteMany({"Title": title}).then(() => {
         fetch_movies();
-    });
+    }).catch(e => console.log("Delete movie failed.", e));
 }
 
 function removeAllMovies() {
     console.log("Removing all movies.");
-    collStats.deleteOne(statsFilter).catch(e => console.log("Delete movie stats failed.", e));
-    collMovies.deleteMany({}).then(function () {
+    collMovies.deleteMany({}).then(() => {
         fetch_movies();
     }).catch(e => console.log("Delete all movies failed.", e));
 }
@@ -74,42 +92,35 @@ function fetch_movies() {
         let movies = $('#movies');
         movies.empty();
         for (let x in docs) {
-            let doc = docs[x];
-            let row = '' +
-                '<tr>' +
-                '<th scope="row">' + eval(eval(x) + 1) + '</th>' +
-                '<td>' + doc.Title + '</td>' +
-                '<td>' + doc.Year + '</td>' +
-                '<td>' + doc.Released + '</td>' +
-                '<td>' + doc.Released_ISO + '</td>' +
-                '<td>' + doc.Runtime + '</td>' +
-                '<td>' + doc.Genre + '</td>' +
-                '<td>' + doc.Language + '</td>' +
-                '<td>' + doc.Metascore + '</td>' +
-                '<td>' + doc.imdbRating + '</td>' +
-                '<td>' + doc.BoxOffice + '</td>' +
-                '<td>' + doc.Production + '</td>' +
-                '</tr>';
-            movies.append(row);
+            movies.append(buildRow(x, docs[x]));
         }
     }).catch(err => {
         console.error(err)
     });
 }
 
-const client = stitch.Stitch.initializeDefaultAppClient(APP_ID);
-let hasRedirectResult = client.auth.hasRedirectResult();
+function buildRow(index, doc) {
+    let columnOrder = ['Title', 'Year', 'Released', 'Released_ISO', 'Runtime', 'Genre', 'Language', 'Metascore', 'imdbRating', 'BoxOffice', 'Production'];
 
-if (hasRedirectResult) {
-    client.auth.handleRedirectResult().then(() => {
-        const db = client.getServiceClient(stitch.RemoteMongoClient.factory, ATLAS_SERVICE).db('stitch');
-        collStats = db.collection('movies_stats');
-        collMovies = db.collection('movies');
-        initStats();
-        updateStats();
-        fetch_movies();
+    let tr = document.createElement("tr");
+
+    let th = document.createElement("th");
+    th.setAttribute("scope", "row");
+    th.innerText = eval(eval(index) + 1);
+    tr.appendChild(th);
+
+    columnOrder.forEach(col => {
+        let td = document.createElement("td");
+        td.innerText = doc[col];
+        tr.appendChild(td);
     });
-} else {
-    const credential = new stitch.GoogleRedirectCredential();
-    client.auth.loginWithRedirect(credential);
+
+    let td = document.createElement("td");
+    let input = document.createElement("input");
+    input.setAttribute("type", "submit");
+    input.setAttribute("value", "Delete");
+    input.onclick = () => removeMovie(doc.Title);
+    td.appendChild(input);
+    tr.appendChild(td);
+    return tr;
 }
