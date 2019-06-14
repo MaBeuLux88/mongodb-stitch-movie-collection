@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"stitch.movies"},{"v":2,"key":{"Title":1},"name":"Title_1","ns":"stitch.movies","background":true}],"uuid":"206819a18c6f42d39e75af8aa6801c50"}
