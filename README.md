@@ -27,33 +27,24 @@ export STITCH_USERNAME="<your Atlas login email>"
 export STITCH_API_KEY="XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 ```
 
-* Add the [secrets](https://docs.mongodb.com/stitch/import-export/application-schema/#sensitive-information) for [Google Authentication](https://console.developers.google.com/apis/credentials) & [Twilio](https://www.twilio.com/console/sms/services) : create the file `MovieCollection/secrets.json`. If you don't want to do that now, insert fake secrets and you can fix them later on the Stitch website directly.
-
-```js
-{
-  "auth_providers": {
-    "oauth2-google": {
-      "clientSecret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    }
-  },
-  "services": {
-    "IMDB_Twilio": {
-      "auth_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    }
-  }
-}
-
-```
- 
+* **[Optional]** To make the website work,
+  * Go to [Google Authentication](https://console.developers.google.com/apis/credentials),
+  * Create a Google OAuth 2.0 client ID and secret (see details below).
+* **[Optional]** To be able to send movie title from your phone,
+  * Setup [Twilio](https://www.twilio.com/console/sms/services),
+   * You will need the Twilio SID and auth token.
+   * Then when the app is created, you will need to forward the text messages from Twilio to the Stitch webhook provided in the IMDB_Twilio service.
 * Generate a free [API key for OMDB API](http://www.omdbapi.com/apikey.aspx). They will send you an email in which you need to click the validation link.
-* Start the `1_pushToNewStitchProject.sh` script and follow the instructions.
+* Start the `1_pushToNewStitchProject.sh` script and follow the instructions. 
+  * If you don't have something, just hit enter, you can fix it later in Stitch.
+  * Secrets are not echoed in the shell so don't be surprised.
 * Add the following environment variable in your env. You can find your APPID in the Stitch website or at the end of the previous script output.
 
 ```sh
 export STITCH_APPID="myproject-abcde"
 ```
 
-* You can now use the scripts 2 & 3 to work with your own new project.
+* You can now use the scripts 2 & 3 to work with your own new project now.
  
 ## Trouble with Google Credentials to make the website work?
 
