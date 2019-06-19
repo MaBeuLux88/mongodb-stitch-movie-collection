@@ -5,7 +5,7 @@
         "sid": "ACa63666b4d7c9d4cfc7e25ed691e77b1f"
     },
     "secret_config": {
-        "auth_token": "__IMDB_Twilio_auth_token"
+        "auth_token": "twilio_auth_token"
     },
     "version": 1
 }
