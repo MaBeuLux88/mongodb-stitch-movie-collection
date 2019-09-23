@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-stitch-cli login --username=$STITCH_USERNAME --api-key=$STITCH_API_KEY
+stitch-cli login --api-key=$STITCH_PUBLIC_API_KEY --private-api-key=$STITCH_PRIVATE_API_KEY
 
 # Get all the values we need to setup the app correctly.
 read -p "Enter your cluster name in MongoDB Atlas [Cluster0]: " CLUSTER
