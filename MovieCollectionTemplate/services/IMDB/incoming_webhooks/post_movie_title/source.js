@@ -5,5 +5,9 @@ exports = function(payload, response) {
   movies.insertOne(body)
   .then(result => {
     response.setStatusCode(201);
+  })
+  .catch( e => {
+    console.log(e);
+    response.setStatusCode(403);
   });
 };
